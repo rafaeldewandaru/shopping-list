@@ -54,12 +54,16 @@ def logout_user(request):
 @login_required(login_url='/login')
 def show_main(request):
     products = Product.objects.filter(user=request.user)
+    if 'last_login' in request.COOKIES:
+        last_login = request.COOKIES['last_login']
+    else:
+        last_login = 'N/A'
 
     context = {
         'name': request.user.username,
         'class': 'PBP F',
         'products': products,
-        'last_login': request.COOKIES['last_login'],
+        'last_login': last_login,
     }
 
     return render(request, "main.html", context)
